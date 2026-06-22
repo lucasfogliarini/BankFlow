@@ -12,7 +12,7 @@ public class Account : AggregateRoot
     public IList<BankAccount>? Contacts { get; private set; }
     public IList<PixKey>? PixKeys { get; private set; }
 
-    public void Debit(TransactionType transactionType, decimal amount, string? description)
+    public void Debit(TransactionType transactionType, decimal amount, string? description = null)
     {
         Withdraw(amount);
         var transaction = AccountTransaction.CreateDebit(this.Id, transactionType, amount, description);

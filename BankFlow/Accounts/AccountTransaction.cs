@@ -3,8 +3,8 @@ namespace BankFlow;
 public enum TransactionType
 {
     Pix,
-    CreditCardPayment,
-    BillPayment,    
+    CreditCardBillPayment,
+    BankSlipPayment,    
     Reversal
 }
 
