@@ -1,0 +1,62 @@
+namespace BankFlow.Application;
+
+public class GetCreditCardAccountDetailsHandler(
+    ICreditCardAccountRepository accountRepository,
+    ICreditCardRepository cardRepository)
+{
+    public async Task<CreditCardAccountDetailsDto?> HandleAsync(GetCreditCardAccountDetails query, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(query);
+
+        var account = await accountRepository.GetByIdAsync(query.AccountId, cancellationToken);
+        if (account is null)
+            return null;
+
+        var cards = await cardRepository.GetCardsByAccountIdAsync(query.AccountId, cancellationToken);
+        var mainCard = cards.FirstOrDefault(c => c.Type == CardType.Physical) 
+                       ?? cards.FirstOrDefault();
+
+        var mainCardNumber = mainCard?.CardNumber ?? "No active card";
+
+        var transactionsDto = account.Transactions
+            .OrderByDescending(t => t.CreatedAt)
+            .Select(t => new CreditCardTransactionDto(
+                t.Id,
+                t.Merchant,
+                t.Amount,
+                t.CreatedAt,
+                t.Description
+            ))
+            .ToList();
+
+        return new CreditCardAccountDetailsDto(
+            account.Id,
+            mainCardNumber,
+            account.AvailableLimit,
+            account.UsedLimit,
+            account.InvoiceClosingDate,
+            account.InvoiceDueDate,
+            transactionsDto
+        );
+    }
+}
+
+public record GetCreditCardAccountDetails(Guid AccountId);
+
+public record CreditCardAccountDetailsDto(
+    Guid AccountId,
+    string MainCardNumber,
+    decimal AvailableLimit,
+    decimal CurrentInvoiceAmount,
+    DateTime InvoiceClosingDate,
+    DateTime InvoiceDueDate,
+    List<CreditCardTransactionDto> Transactions
+);
+
+public record CreditCardTransactionDto(
+    Guid Id,
+    string Merchant,
+    decimal Amount,
+    DateTime CreatedAt,
+    string? Description
+);
