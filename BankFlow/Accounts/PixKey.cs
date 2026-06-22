@@ -8,7 +8,7 @@ public enum PixKeyType
     Random
 }
 
-public class PixKey
+public record PixKey
 {
     public PixKeyType Type { get; }
     public string Value { get; }

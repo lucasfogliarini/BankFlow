@@ -1,6 +1,6 @@
 namespace BankFlow;
 
-public class Contact : Entity
+public class BankAccount : Entity
 {
     public string Name { get; private set; }
     public Bank Bank { get; private set; }
@@ -8,7 +8,7 @@ public class Contact : Entity
     public AccountNumber AccountNumber { get; private set; }
     public PixKey? PixKey { get; private set; }
 
-    public Contact(
+    public BankAccount(
         string name,
         Bank bank,
         Agency agency,

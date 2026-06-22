@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="BankFlow.Application/BankFlow.Application.csproj" Id="142ff3d2-9b60-49d4-8862-beb0b89042bd" />
+  <Project Path="BankFlow.Tests/BankFlow.Tests.csproj" Id="55bb172a-5a8e-41f8-982f-05e88db6a82c" />
   <Project Path="BankFlow/BankFlow.csproj" />
 </Solution>
