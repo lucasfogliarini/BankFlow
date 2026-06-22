@@ -6,10 +6,7 @@ public class AdjustCreditCardAccountLimitHandler(ICreditCardAccountRepository re
     {
         ArgumentNullException.ThrowIfNull(command);
 
-        var account = await repository.GetByIdAsync(command.AccountId, cancellationToken);
-        if (account is null)
-            throw new InvalidOperationException("Credit card account not found.");
-
+        var account = await repository.GetByIdAsync(command.AccountId, cancellationToken) ?? throw new InvalidOperationException("Credit card account not found.");
         account.AdjustLimit(command.NewLimit);
 
         repository.Update(account);

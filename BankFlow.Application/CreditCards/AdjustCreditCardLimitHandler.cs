@@ -1,8 +1,6 @@
 namespace BankFlow.Application;
 
-public class AdjustCreditCardLimitHandler(
-    ICreditCardRepository cardRepository,
-    ICreditCardAccountRepository accountRepository)
+public class AdjustCreditCardLimitHandler(ICreditCardRepository cardRepository)
 {
     public async Task HandleAsync(AdjustCreditCardLimit command, CancellationToken cancellationToken = default)
     {
@@ -11,10 +9,7 @@ public class AdjustCreditCardLimitHandler(
         var card = await cardRepository.GetByIdAsync(command.CardId, cancellationToken)
                    ?? throw new InvalidOperationException("Card not found.");
 
-        var account = await accountRepository.GetByIdAsync(command.AccountId, cancellationToken)
-                      ?? throw new InvalidOperationException("Credit card account not found.");
-
-        if (command.NewLimit.HasValue && command.NewLimit.Value > account.AdjustedLimit)
+        if (command.NewLimit.HasValue && command.NewLimit.Value > card.Account.AdjustedLimit)
             throw new InvalidOperationException($"Card individual limit ({command.NewLimit.Value}) cannot exceed the account's adjusted limit ({account.AdjustedLimit}).");
 
         card.AdjustLimit(command.NewLimit);

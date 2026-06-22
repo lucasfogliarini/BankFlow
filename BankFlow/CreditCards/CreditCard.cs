@@ -1,8 +1,9 @@
 namespace BankFlow;
 
-public class CreditCard : AggregateRoot
+public class CreditCard : Entity
 {
     public Guid CreditCardAccountId { get; private set; }
+    public CreditCardAccount Account { get; set; }
     public string Label { get; private set; } = null!;
     public string CardNumber { get; private set; } = null!;
     public CardType Type { get; private set; }
