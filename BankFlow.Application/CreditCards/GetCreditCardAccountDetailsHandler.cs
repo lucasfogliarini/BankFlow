@@ -4,7 +4,7 @@ public class GetCreditCardAccountDetailsHandler(
     ICreditCardAccountRepository accountRepository,
     ICreditCardRepository cardRepository)
 {
-    public async Task<CreditCardAccountDetailsDto?> HandleAsync(GetCreditCardAccountDetails query, CancellationToken cancellationToken = default)
+    public async Task<CreditCardAccountDetailsResponse?> HandleAsync(GetCreditCardAccountDetails query, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(query);
 
@@ -18,9 +18,9 @@ public class GetCreditCardAccountDetailsHandler(
 
         var mainCardNumber = mainCard?.CardNumber ?? "No active card";
 
-        var transactionsDto = account.Transactions
+        var transactionsResponse = account.Transactions
             .OrderByDescending(t => t.CreatedAt)
-            .Select(t => new CreditCardTransactionDto(
+            .Select(t => new CreditCardTransactionResponse(
                 t.Id,
                 t.Merchant,
                 t.Amount,
@@ -29,31 +29,31 @@ public class GetCreditCardAccountDetailsHandler(
             ))
             .ToList();
 
-        return new CreditCardAccountDetailsDto(
+        return new CreditCardAccountDetailsResponse(
             account.Id,
             mainCardNumber,
             account.AvailableLimit,
             account.UsedLimit,
             account.InvoiceClosingDate,
             account.InvoiceDueDate,
-            transactionsDto
+            transactionsResponse
         );
     }
 }
 
 public record GetCreditCardAccountDetails(Guid AccountId);
 
-public record CreditCardAccountDetailsDto(
+public record CreditCardAccountDetailsResponse(
     Guid AccountId,
     string MainCardNumber,
     decimal AvailableLimit,
     decimal CurrentInvoiceAmount,
     DateTime InvoiceClosingDate,
     DateTime InvoiceDueDate,
-    List<CreditCardTransactionDto> Transactions
+    List<CreditCardTransactionResponse> Transactions
 );
 
-public record CreditCardTransactionDto(
+public record CreditCardTransactionResponse(
     Guid Id,
     string Merchant,
     decimal Amount,

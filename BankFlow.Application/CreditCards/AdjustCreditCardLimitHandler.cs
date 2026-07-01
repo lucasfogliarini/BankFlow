@@ -10,7 +10,7 @@ public class AdjustCreditCardLimitHandler(ICreditCardRepository cardRepository)
                    ?? throw new InvalidOperationException("Card not found.");
 
         if (command.NewLimit.HasValue && command.NewLimit.Value > card.Account.AdjustedLimit)
-            throw new InvalidOperationException($"Card individual limit ({command.NewLimit.Value}) cannot exceed the account's adjusted limit ({account.AdjustedLimit}).");
+            throw new InvalidOperationException($"Card individual limit ({command.NewLimit.Value}) cannot exceed the account's adjusted limit ({card.Account.AdjustedLimit}).");
 
         card.AdjustLimit(command.NewLimit);
 
