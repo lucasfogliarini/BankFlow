@@ -46,7 +46,7 @@ public record GetCreditCardAccountDetails(Guid AccountId);
 public record CreditCardAccountDetailsResponse(
     Guid AccountId,
     string MainCardNumber,
-    decimal AvailableLimit,
+    decimal? AvailableLimit,
     decimal CurrentInvoiceAmount,
     DateTime InvoiceClosingDate,
     DateTime InvoiceDueDate,

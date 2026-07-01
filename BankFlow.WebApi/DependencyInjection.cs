@@ -1,4 +1,4 @@
-﻿using BankFlow.Application.Accounts;
+﻿using BankFlow.Application.BankAccounts;
 using BankFlow.WebApi;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json.Serialization;

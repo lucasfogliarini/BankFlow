@@ -1,4 +1,4 @@
-namespace BankFlow.Application.Accounts;
+namespace BankFlow.Application.BankAccounts;
 
 public class PayBankSlipHandler(IAccountRepository accountRepository)
 {

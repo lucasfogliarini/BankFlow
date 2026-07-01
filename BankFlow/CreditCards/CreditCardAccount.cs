@@ -2,12 +2,13 @@ namespace BankFlow;
 
 public class CreditCardAccount : AggregateRoot
 {
+    public CreditCardAccountStatus Status { get; private set; }
     public Guid CustomerId { get; private set; }
     public Customer Customer { get; private set; }
-    public decimal TotalLimit { get; private set; }
-    public decimal AdjustedLimit { get; private set; }
+    public decimal? TotalLimit { get; private set; }
+    public decimal? AdjustedLimit { get; private set; }
     public decimal UsedLimit { get; private set; }
-    public decimal AvailableLimit => AdjustedLimit - UsedLimit;
+    public decimal? AvailableLimit => AdjustedLimit - UsedLimit;
     public DateTime InvoiceClosingDate { get; private set; }
     public DateTime InvoiceDueDate { get; private set; }
     public IList<CreditCardTransaction> Transactions { get; private set; } = [];
@@ -16,19 +17,16 @@ public class CreditCardAccount : AggregateRoot
     {
     }
 
-    public static CreditCardAccount Create(Guid customerId, decimal totalLimit)
+    public static CreditCardAccount Create(Guid customerId, CreditCardAccountStatus status)
     {
-        if (totalLimit < 0)
-            throw new ArgumentOutOfRangeException(nameof(totalLimit), "Total limit cannot be negative.");
 
         var now = DateTime.UtcNow;
         return new CreditCardAccount
         {
             Id = Guid.NewGuid(),
             CustomerId = customerId,
-            TotalLimit = totalLimit,
-            AdjustedLimit = totalLimit, // Inicialmente o limite ajustado é o total aprovado
             UsedLimit = 0,
+            Status = status,
             InvoiceClosingDate = new DateTime(now.Year, now.Month, 2).AddMonths(1), // Próximo dia 2
             InvoiceDueDate = new DateTime(now.Year, now.Month, 9).AddMonths(1)     // Próximo dia 9
         };
@@ -46,6 +44,21 @@ public class CreditCardAccount : AggregateRoot
             throw new InvalidOperationException($"Cannot reduce limit to {newLimit} because the current used limit is {UsedLimit}.");
 
         AdjustedLimit = newLimit;
+    }
+
+    public void Approve(decimal totalLimit)
+    {
+        if (totalLimit < 0)
+            throw new ArgumentOutOfRangeException(nameof(totalLimit), "Total limit cannot be negative.");
+
+        TotalLimit = totalLimit;
+        AdjustedLimit = totalLimit;
+        Status = CreditCardAccountStatus.Active;
+    }
+
+    public void Reject()
+    {
+        Status = CreditCardAccountStatus.Rejected;
     }
 
     public void ProcessTransaction(CreditCard card, decimal amount, string merchant, string? description = null)

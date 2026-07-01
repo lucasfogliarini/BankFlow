@@ -88,6 +88,7 @@ public static class DependencyInjection
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<ICreditCardRepository, CreditCardRepository>();
         services.AddScoped<ICreditCardAccountRepository, CreditCardAccountRepository>();
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
     }
     public static async Task MigrateAndSeedAsync(this IHost host)
     {

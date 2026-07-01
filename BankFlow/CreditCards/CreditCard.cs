@@ -14,7 +14,7 @@ public class CreditCard : Entity
     private CreditCard()
     {
     }
-    public static CreditCard Create(Guid accountId, string label, CardType type, decimal? limit = null)
+    public static CreditCard Create(Guid accountId, string label, CardType type, decimal? limit = null, CardStatus status = CardStatus.Active)
     {
         if (string.IsNullOrWhiteSpace(label))
             throw new ArgumentException("Label cannot be empty.", nameof(label));
@@ -29,7 +29,7 @@ public class CreditCard : Entity
             Label = label,
             CardNumber = GenerateCardNumber(),
             Type = type,
-            Status = CardStatus.Active,
+            Status = status,
             Limit = limit,
             UsedLimit = 0
         };
@@ -41,6 +41,18 @@ public class CreditCard : Entity
     public void Unblock()
     {
         Status = CardStatus.Active;
+    }
+    public void Approve(decimal? limit)
+    {
+        if (limit.HasValue && limit.Value < 0)
+            throw new ArgumentOutOfRangeException(nameof(limit));
+
+        Limit = limit;
+        Status = CardStatus.Active;
+    }
+    public void Reject()
+    {
+        Status = CardStatus.Rejected;
     }
     public void AdjustLimit(decimal? newLimit)
     {

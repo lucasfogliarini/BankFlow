@@ -3,5 +3,7 @@ namespace BankFlow;
 public enum CardStatus
 {
     Blocked,
-    Active
+    Active,
+    Rejected,
+    Pending
 }

@@ -1,4 +1,4 @@
-﻿namespace BankFlow.Application.Accounts;
+﻿namespace BankFlow.Application.BankAccounts;
 
 public class TransferPixHandler(IAccountRepository accountRepository)
 {

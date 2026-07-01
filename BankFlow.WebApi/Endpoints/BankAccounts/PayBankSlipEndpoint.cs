@@ -1,7 +1,5 @@
-using BankFlow.Application.Accounts;
-using BankFlow.Application;
+using BankFlow.Application.BankAccounts;
 using Wolverine;
-using IResult = Microsoft.AspNetCore.Http.IResult;
 
 namespace BankFlow.WebApi.Endpoints;
 
