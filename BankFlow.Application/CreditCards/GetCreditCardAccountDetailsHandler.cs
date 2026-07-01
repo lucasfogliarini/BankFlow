@@ -1,20 +1,18 @@
 namespace BankFlow.Application;
 
 public class GetCreditCardAccountDetailsHandler(
-    ICreditCardAccountRepository accountRepository,
-    ICreditCardRepository cardRepository)
+    ICreditCardAccountRepository cardAccountRepository)
 {
     public async Task<CreditCardAccountDetailsResponse?> HandleAsync(GetCreditCardAccountDetails query, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(query);
 
-        var account = await accountRepository.GetByIdAsync(query.AccountId, cancellationToken);
+        var account = await cardAccountRepository.GetByIdAsync(query.AccountId, cancellationToken);
         if (account is null)
             return null;
 
-        var cards = await cardRepository.GetCardsByAccountIdAsync(query.AccountId, cancellationToken);
-        var mainCard = cards.FirstOrDefault(c => c.Type == CardType.Physical) 
-                       ?? cards.FirstOrDefault();
+        var mainCard = account.CreditCards.FirstOrDefault(c => c.Type == CardType.Physical) 
+                       ?? account.CreditCards.FirstOrDefault();
 
         var mainCardNumber = mainCard?.CardNumber ?? "No active card";
 

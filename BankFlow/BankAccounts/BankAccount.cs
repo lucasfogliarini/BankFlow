@@ -9,6 +9,7 @@ public class BankAccount : Entity
     public AccountNumber Number { get; private set; }
     public PixKey? PixKey { get; private set; }
 
+    private BankAccount() { }
     public BankAccount(
         string name,
         Bank bank,

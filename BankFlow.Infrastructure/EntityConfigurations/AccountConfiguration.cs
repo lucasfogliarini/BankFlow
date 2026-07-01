@@ -10,6 +10,5 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.HasKey(e => e.Id);
         builder.ComplexProperty(e => e.Number);
         builder.ComplexProperty(e => e.Agency);
-        builder.ComplexCollection(e => e.PixKeys);
     }
 }

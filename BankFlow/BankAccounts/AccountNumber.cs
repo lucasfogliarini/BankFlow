@@ -4,8 +4,10 @@ namespace BankFlow;
 
 public record AccountNumber
 {
-    public string Number { get; }
-    public string Digit { get; }
+    public string Number { get; private set; }
+    public string Digit { get; private set; }
+
+    private AccountNumber() { }
 
     public AccountNumber(string number, string digit)
     {

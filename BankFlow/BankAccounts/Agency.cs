@@ -4,8 +4,9 @@ namespace BankFlow;
 
 public record Agency
 {
-    public string Value { get; }
+    public string Value { get; private set; }
 
+    private Agency() { }
     public Agency(string value)
     {
         if (string.IsNullOrWhiteSpace(value))

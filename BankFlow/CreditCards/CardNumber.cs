@@ -4,8 +4,9 @@ namespace BankFlow;
 
 public record CardNumber
 {
-    public string Value { get; }
+    public string Value { get; private set; }
 
+    private CardNumber() { }
     public CardNumber(string value)
     {
         if (string.IsNullOrWhiteSpace(value))

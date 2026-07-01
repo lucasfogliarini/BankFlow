@@ -24,7 +24,6 @@ public class Customer : AggregateRoot
             Phone = phone ?? string.Empty,
             Address = address
         };
-        costumer.AddDomainEvent(new CustomerCreated(cpf));
         return costumer;
     }
 }

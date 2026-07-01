@@ -94,7 +94,7 @@ public static class DependencyInjection
     {
         using var scope = host.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<BankFlowDbContext>();
-        db.Database.Migrate();
+        db.Database.EnsureCreated();
 
         if (!await db.Set<Customer>().AnyAsync())
         {
@@ -111,23 +111,26 @@ public static class DependencyInjection
 
             creditCardAccount.AddCreditCard("Cartão Físico", CardType.Physical, 5000m);
 
+            Console.WriteLine(creditCardAccount.Id);
+            Console.WriteLine(account.Id);
+
             await db.CommitAsync();
         }
     }
     private static void AddDbContext(this IHostApplicationBuilder builder, string connectionStringKey = "BankFlow")
     {
         var connectionString = builder.Configuration.GetConnectionString(connectionStringKey);
+
+        var connection = new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+        builder.Services.AddSingleton(connection);
+
         void BuilderOptions(DbContextOptionsBuilder options)
         {
             if (connectionString is not null)
                 options.UseNpgsql(connectionString);
             else
-            {
-                var connection = new SqliteConnection("Data Source=:memory:");
-                connection.Open();
-                builder.Services.AddSingleton(connection);
                 options.UseSqlite(connection);
-            }
 
             // Use the following options only during development or troubleshooting
             options.EnableSensitiveDataLogging();

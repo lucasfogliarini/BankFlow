@@ -8,11 +8,12 @@ public enum PixKeyType
     Random
 }
 
-public record PixKey
+public class PixKey : Entity
 {
-    public PixKeyType Type { get; }
-    public string Value { get; }
+    public PixKeyType Type { get; private set; }
+    public string Value { get; private set; }
 
+    public PixKey() { }
     private PixKey(PixKeyType type, string value)
     {
         Type = type;
