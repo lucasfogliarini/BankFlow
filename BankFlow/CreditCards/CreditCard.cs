@@ -3,7 +3,7 @@ namespace BankFlow;
 public class CreditCard : Entity
 {
     public Guid CreditCardAccountId { get; private set; }
-    public CreditCardAccount Account { get; set; }
+    public CreditCardAccount CreditCardAccount { get; set; }
     public string Label { get; private set; } = null!;
     public CardNumber CardNumber { get; private set; } = null!;
     public CardType Type { get; private set; }
@@ -14,7 +14,7 @@ public class CreditCard : Entity
     private CreditCard()
     {
     }
-    public static CreditCard Create(Guid accountId, string label, CardType type, decimal? limit = null, CardStatus status = CardStatus.Active)
+    public static CreditCard Create(string label, CardType type, decimal? limit = null, CardStatus status = CardStatus.Active)
     {
         if (string.IsNullOrWhiteSpace(label))
             throw new ArgumentException("Label cannot be empty.", nameof(label));
@@ -25,7 +25,6 @@ public class CreditCard : Entity
         return new CreditCard
         {
             Id = Guid.NewGuid(),
-            CreditCardAccountId = accountId,
             Label = label,
             CardNumber = GenerateCardNumber(),
             Type = type,

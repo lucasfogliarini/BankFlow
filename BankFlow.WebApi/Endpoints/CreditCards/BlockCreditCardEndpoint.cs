@@ -1,6 +1,5 @@
 using BankFlow.Application;
 using Wolverine;
-using IResult = Microsoft.AspNetCore.Http.IResult;
 
 namespace BankFlow.WebApi.Endpoints;
 
@@ -15,7 +14,7 @@ internal sealed class BlockCreditCardEndpoint : IEndpoint
 
     public IEndpointConventionBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapPut($"{Routes.CreditCards}/{{accountId}}/cards/{{cardId}}/block", BlockAsync)
+        return app.MapPut($"{Routes.CreditCards}/{{cardId}}/block", BlockAsync)
             .WithTags(Routes.CreditCards)
             .Produces(StatusCodes.Status200OK)
             .WithSummary("Bloqueia um cartão de crédito.");

@@ -14,20 +14,17 @@ public class Account : AggregateRoot
 
     private Account() { }
 
-    public static Account Create(Customer customer, Agency? agency = null, AccountNumber? accountNumber = null)
+    public static Account Create(Customer customer, AccountNumber accountNumber, Agency? agency = null)
     {
         ArgumentNullException.ThrowIfNull(customer);
-
-        var rng = new Random();
-        var generatedAgency = agency ?? new Agency("0001");
-        var generatedNumber = accountNumber ?? new AccountNumber(rng.Next(100000, 999999).ToString(), rng.Next(0, 9).ToString());
+        ArgumentNullException.ThrowIfNull(accountNumber);
 
         var account = new Account
         {
             CustomerId = customer.Id,
             Customer = customer,
-            Agency = generatedAgency,
-            Number = generatedNumber,
+            Agency = agency ?? new Agency("0001"),
+            Number = accountNumber,
             Balance = 0m,
             Status = AccountStatus.Active,
             PixKeys = [PixKey.CreateRandom()]
@@ -42,7 +39,6 @@ public class Account : AggregateRoot
         var transaction = AccountTransaction.CreateDebit(this.Id, transactionType, amount, description);
         Transactions.Add(transaction);
     }
-
     public void Deposit(decimal amount)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount);

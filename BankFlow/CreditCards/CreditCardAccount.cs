@@ -12,6 +12,7 @@ public class CreditCardAccount : AggregateRoot
     public DateTime InvoiceClosingDate { get; private set; }
     public DateTime InvoiceDueDate { get; private set; }
     public IList<CreditCardTransaction> Transactions { get; private set; } = [];
+    public IList<CreditCard> CreditCards { get; private set; } = [];
 
     private CreditCardAccount()
     {
@@ -30,6 +31,30 @@ public class CreditCardAccount : AggregateRoot
             InvoiceClosingDate = new DateTime(now.Year, now.Month, 2).AddMonths(1), // Próximo dia 2
             InvoiceDueDate = new DateTime(now.Year, now.Month, 9).AddMonths(1)     // Próximo dia 9
         };
+    }
+
+    public void AddCreditCard(string label, CardType type, decimal? limit = null)
+    {
+        if (Status != CreditCardAccountStatus.Active)
+            throw new InvalidOperationException("Cannot add a card to an account that is not active.");
+
+        var hasPhysical = CreditCards.Any(c => c.Type == CardType.Physical && c.Status == CardStatus.Active);
+        if (hasPhysical)
+            throw new InvalidOperationException("An account can only have one active physical card.");
+
+        var labelExists = CreditCards.Any(c => c.Label == label && c.Status == CardStatus.Active);
+
+        if (labelExists)
+            throw new InvalidOperationException("A card with this ID or label already exists.");
+
+        if (limit.HasValue && limit.Value < 0)
+            throw new ArgumentOutOfRangeException(nameof(limit), "Individual card limit cannot be negative.");
+
+        if (limit.HasValue && limit.Value > TotalLimit)
+            throw new InvalidOperationException($"Card individual limit ({limit.Value}) cannot exceed the account's total limit ({TotalLimit}).");
+
+        var creditCard = CreditCard.Create(label, type, limit);
+        CreditCards.Add(creditCard);
     }
 
     public void AdjustLimit(decimal newLimit)

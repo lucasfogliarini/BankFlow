@@ -1,6 +1,5 @@
 using BankFlow.Application;
 using Wolverine;
-using IResult = Microsoft.AspNetCore.Http.IResult;
 
 namespace BankFlow.WebApi.Endpoints;
 
@@ -15,7 +14,7 @@ internal sealed class AdjustCreditCardLimitEndpoint : IEndpoint
 
     public IEndpointConventionBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapPut($"{Routes.CreditCards}/{{accountId}}/cards/{{cardId}}/limit", AdjustAsync)
+        return app.MapPut($"{Routes.CreditCards}/{{cardId}}/limit", AdjustAsync)
             .WithTags(Routes.CreditCards)
             .Produces(StatusCodes.Status200OK)
             .WithSummary("Ajusta o limite individual de um cartão.");

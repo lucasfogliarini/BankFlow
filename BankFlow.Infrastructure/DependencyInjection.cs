@@ -94,8 +94,25 @@ public static class DependencyInjection
     {
         using var scope = host.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<BankFlowDbContext>();
-
         db.Database.Migrate();
+
+        if (!await db.Set<Customer>().AnyAsync())
+        {
+            var address = new Address("Rua Sapé", "1020", "Porto Alegre", "RS", "91350-050");
+            var customer = Customer.Create("Lucas Fogliarin Pedroso", "02277982016", "lucasfogliarini@gmail.com", "51992364249", address);
+            db.Add(customer);
+
+            var account = Account.Create(customer, "123456-7");
+            db.Add(account);
+
+            var creditCardAccount = CreditCardAccount.Create(customer.Id, CreditCardAccountStatus.Active);
+
+            db.Add(creditCardAccount);
+
+            creditCardAccount.AddCreditCard("Cartão Físico", CardType.Physical, 5000m);
+
+            await db.CommitAsync();
+        }
     }
     private static void AddDbContext(this IHostApplicationBuilder builder, string connectionStringKey = "BankFlow")
     {

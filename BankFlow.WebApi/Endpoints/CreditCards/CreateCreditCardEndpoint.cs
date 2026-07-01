@@ -1,6 +1,5 @@
 using BankFlow.Application;
 using Wolverine;
-using IResult = Microsoft.AspNetCore.Http.IResult;
 
 namespace BankFlow.WebApi.Endpoints;
 
@@ -12,7 +11,7 @@ internal sealed class CreateCreditCardEndpoint : IEndpoint
         IMessageBus bus,
         CancellationToken cancellationToken = default)
     {
-        var command = new CreateCreditCard(accountId, request.CardId, request.Label, request.Type, request.IndividualLimit);
+        var command = new CreateCreditCard(accountId, request.Label, request.Type, request.Limit);
         await bus.InvokeAsync(command, cancellationToken);
 
         return Results.Ok();
@@ -20,11 +19,11 @@ internal sealed class CreateCreditCardEndpoint : IEndpoint
 
     public IEndpointConventionBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapPost($"{Routes.CreditCards}/{{accountId}}/cards", CreateCreditCardAsync)
-           .WithTags(Routes.CreditCards)
+        return app.MapPost($"{Routes.CreditCardAccounts}/{{accountId}}/cards", CreateCreditCardAsync)
+           .WithTags(Routes.CreditCardAccounts)
            .Produces(StatusCodes.Status200OK)
            .WithSummary("Cria um cartão de crédito para a conta.");
     }
 }
 
-internal sealed record CreateCreditCardRequest(Guid CardId, string Label, CardType Type, decimal? IndividualLimit = null);
+internal sealed record CreateCreditCardRequest(string Label, CardType Type, decimal? Limit = null);

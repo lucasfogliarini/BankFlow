@@ -6,12 +6,14 @@ public class CreditCardAccountRepository(BankFlowDbContext dbContext) : Reposito
 {
     public async Task<CreditCardAccount?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await dbContext.Set<CreditCardAccount>().FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
+        return await dbContext.Set<CreditCardAccount>()
+            .Include(e=>e.CreditCards)
+            .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 
     public async Task<CreditCardAccount?> GetByCustomerIdAsync(Guid customerId, CancellationToken cancellationToken = default)
     {
-        return await dbContext.Set<CreditCardAccount>().FirstOrDefaultAsync(a => a.CustomerId == customerId, cancellationToken);
+        return await dbContext.Set<CreditCardAccount>().Include(e=>e.CreditCards).FirstOrDefaultAsync(a => a.CustomerId == customerId, cancellationToken);
     }
 
     public void Add(CreditCardAccount account)

@@ -1,6 +1,5 @@
 using BankFlow.Application;
 using Wolverine;
-using IResult = Microsoft.AspNetCore.Http.IResult;
 
 namespace BankFlow.WebApi.Endpoints;
 
@@ -16,8 +15,8 @@ internal sealed class GetCreditCardAccountDetailsEndpoint : IEndpoint
 
     public IEndpointConventionBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapGet($"{Routes.CreditCards}/{{accountId}}/details", GetAsync)
-            .WithTags(Routes.CreditCards)
+        return app.MapGet($"{Routes.CreditCardAccounts}/{{accountId}}/details", GetAsync)
+            .WithTags(Routes.CreditCardAccounts)
             .Produces<CreditCardAccountDetailsResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithSummary("Obtém detalhes da conta de cartão de crédito.");

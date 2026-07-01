@@ -19,5 +19,7 @@ public record AccountNumber
         Digit = digit;
     }
 
+    public static implicit operator AccountNumber(string accountNumber) => new(accountNumber.Split('-')[0], accountNumber.Split('-')[1]);
+
     public override string ToString() => $"{Number}-{Digit}";
 }

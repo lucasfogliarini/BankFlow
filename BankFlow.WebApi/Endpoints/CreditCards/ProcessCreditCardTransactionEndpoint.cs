@@ -1,6 +1,5 @@
 using BankFlow.Application;
 using Wolverine;
-using IResult = Microsoft.AspNetCore.Http.IResult;
 
 namespace BankFlow.WebApi.Endpoints;
 
@@ -20,8 +19,8 @@ internal sealed class ProcessCreditCardTransactionEndpoint : IEndpoint
 
     public IEndpointConventionBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapPost($"{Routes.CreditCards}/{{accountId}}/transactions", ProcessTransactionAsync)
-           .WithTags(Routes.CreditCards)
+        return app.MapPost($"{Routes.CreditCardAccounts}/{{accountId}}/transactions", ProcessTransactionAsync)
+           .WithTags(Routes.CreditCardAccounts)
            .Produces(StatusCodes.Status200OK)
            .WithSummary("Registra uma transação no cartão de crédito.");
     }

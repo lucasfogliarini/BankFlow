@@ -9,8 +9,8 @@ public class AdjustCreditCardLimitHandler(ICreditCardRepository cardRepository)
         var card = await cardRepository.GetByIdAsync(command.CardId, cancellationToken)
                    ?? throw new InvalidOperationException("Card not found.");
 
-        if (command.NewLimit.HasValue && command.NewLimit.Value > card.Account.AdjustedLimit)
-            throw new InvalidOperationException($"Card individual limit ({command.NewLimit.Value}) cannot exceed the account's adjusted limit ({card.Account.AdjustedLimit}).");
+        if (command.NewLimit.HasValue && command.NewLimit.Value > card.CreditCardAccount.AdjustedLimit)
+            throw new InvalidOperationException($"Card individual limit ({command.NewLimit.Value}) cannot exceed the account's adjusted limit ({card.CreditCardAccount.AdjustedLimit}).");
 
         card.AdjustLimit(command.NewLimit);
 
