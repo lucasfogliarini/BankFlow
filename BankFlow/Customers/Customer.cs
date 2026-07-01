@@ -6,8 +6,6 @@ public class Customer : AggregateRoot
     public string Email { get; private set; } = string.Empty;
     public string Phone { get; private set; } = string.Empty;
     public Address Address { get; private set; } = null!;
-    public IList<Account> BankAccounts { get; private set; } = [];
-    public CreditCardAccount CreditCardAccount { get; private set; }
 
     private Customer() { }
 
@@ -28,15 +26,5 @@ public class Customer : AggregateRoot
         };
         costumer.AddDomainEvent(new CustomerCreated(cpf));
         return costumer;
-    }
-
-    public void AddBankAccount(Account account)
-    {
-        ArgumentNullException.ThrowIfNull(account);
-
-        if (BankAccounts.Any(a => a.Id == account.Id))
-            throw new InvalidOperationException("Account already added to customer.");
-
-        BankAccounts.Add(account);
     }
 }

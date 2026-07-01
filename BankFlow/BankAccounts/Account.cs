@@ -7,10 +7,34 @@ public class Account : AggregateRoot
     public required Agency Agency { get; set; }
     public required AccountNumber Number { get; set; }    
     public decimal Balance { get; private set; }
-    public bool IsBlocked { get; private set; }
+    public AccountStatus Status { get; private set; }
     public IList<AccountTransaction>? Transactions { get; private set; }
     public IList<BankAccount>? Contacts { get; private set; }
     public IList<PixKey>? PixKeys { get; private set; }
+
+    private Account() { }
+
+    public static Account Create(Customer customer, Agency? agency = null, AccountNumber? accountNumber = null)
+    {
+        ArgumentNullException.ThrowIfNull(customer);
+
+        var rng = new Random();
+        var generatedAgency = agency ?? new Agency("0001");
+        var generatedNumber = accountNumber ?? new AccountNumber(rng.Next(100000, 999999).ToString(), rng.Next(0, 9).ToString());
+
+        var account = new Account
+        {
+            CustomerId = customer.Id,
+            Customer = customer,
+            Agency = generatedAgency,
+            Number = generatedNumber,
+            Balance = 0m,
+            Status = AccountStatus.Active,
+            PixKeys = [PixKey.CreateRandom()]
+        };
+
+        return account;
+    }
 
     public void Debit(TransactionType transactionType, decimal amount, string? description = null)
     {
@@ -29,7 +53,7 @@ public class Account : AggregateRoot
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount);
 
-        if (IsBlocked)
+        if (Status == AccountStatus.Blocked)
             throw new InvalidOperationException("Account is blocked.");
         
 

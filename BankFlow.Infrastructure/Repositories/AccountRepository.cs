@@ -12,6 +12,11 @@ public class AccountRepository(BankFlowDbContext dbContext) : Repository(dbConte
             .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 
+    public void Add(Account account)
+    {
+        dbContext.Add(account);
+    }
+
     public void Update(Account account)
     {
         dbContext.Update(account);
