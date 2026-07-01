@@ -106,13 +106,11 @@ public static class DependencyInjection
             db.Add(account);
 
             var creditCardAccount = CreditCardAccount.Create(customer.Id, CreditCardAccountStatus.Active);
+            creditCardAccount.Id = new Guid("00000000-0000-0000-0000-000000000001");
 
             db.Add(creditCardAccount);
 
             creditCardAccount.AddCreditCard("Cartão Físico", CardType.Physical, 5000m);
-
-            Console.WriteLine(creditCardAccount.Id);
-            Console.WriteLine(account.Id);
 
             await db.CommitAsync();
         }

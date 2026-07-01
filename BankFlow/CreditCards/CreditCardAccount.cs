@@ -38,8 +38,8 @@ public class CreditCardAccount : AggregateRoot
         if (Status != CreditCardAccountStatus.Active)
             throw new InvalidOperationException("Cannot add a card to an account that is not active.");
 
-        var hasPhysical = CreditCards.Any(c => c.Type == CardType.Physical && c.Status == CardStatus.Active);
-        if (hasPhysical)
+        var alreadyPhysical = type == CardType.Physical && CreditCards.Any(c => c.Type == CardType.Physical && c.Status == CardStatus.Active);
+        if (alreadyPhysical)
             throw new InvalidOperationException("An account can only have one active physical card.");
 
         var labelExists = CreditCards.Any(c => c.Label == label && c.Status == CardStatus.Active);
