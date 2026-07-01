@@ -17,8 +17,6 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.RateLimiting;
 using Wolverine;
-using Wolverine.ErrorHandling;
-using Wolverine.Kafka;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -35,17 +33,17 @@ public static class DependencyInjection
     {
         builder.UseWolverine(opts =>
         {
-            opts.Policies
-                .OnException<Exception>()
-                .RetryWithCooldown(
-                    TimeSpan.FromSeconds(1),
-                    TimeSpan.FromSeconds(2),
-                    TimeSpan.FromSeconds(3))
-                .Then
-                .PublishToDeadLetterTopic();
+            //opts.Policies
+            //    .OnException<Exception>()
+            //    .RetryWithCooldown(
+            //        TimeSpan.FromSeconds(1),
+            //        TimeSpan.FromSeconds(2),
+            //        TimeSpan.FromSeconds(3))
+            //    .Then
+            //    .PublishToDeadLetterTopic();
 
-            var kafkaEndpoint = builder.Configuration.GetConnectionString("KafkaServer");
-            opts.UseKafka(kafkaEndpoint).AutoProvision();
+            //var kafkaEndpoint = builder.Configuration.GetConnectionString("KafkaServer");
+            //opts.UseKafka(kafkaEndpoint).AutoProvision();
 
             configure?.Invoke(opts);
 

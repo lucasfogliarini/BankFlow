@@ -2,5 +2,6 @@
   <Project Path="BankFlow.Application/BankFlow.Application.csproj" Id="142ff3d2-9b60-49d4-8862-beb0b89042bd" />
   <Project Path="BankFlow.Infrastructure/BankFlow.Infrastructure.csproj" Id="7d5a21d0-d2c3-433e-9387-4743ecac4abb" />
   <Project Path="BankFlow.Tests/BankFlow.Tests.csproj" Id="55bb172a-5a8e-41f8-982f-05e88db6a82c" />
+  <Project Path="BankFlow.WebApi/BankFlow.WebApi.csproj" Id="017ed810-7c67-4a24-86e6-b49796579aea" />
   <Project Path="BankFlow/BankFlow.csproj" />
 </Solution>
