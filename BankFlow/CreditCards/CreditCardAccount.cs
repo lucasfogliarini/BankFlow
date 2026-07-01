@@ -3,6 +3,7 @@ namespace BankFlow;
 public class CreditCardAccount : AggregateRoot
 {
     public Guid CustomerId { get; private set; }
+    public Customer Customer { get; private set; }
     public decimal TotalLimit { get; private set; }
     public decimal AdjustedLimit { get; private set; }
     public decimal UsedLimit { get; private set; }

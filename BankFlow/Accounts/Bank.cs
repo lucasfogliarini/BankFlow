@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace BankFlow;
 
-public record Bank
+public class Bank : Entity
 {
     public string Code { get; }
     public string Name { get; }

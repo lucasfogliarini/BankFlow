@@ -3,7 +3,7 @@ namespace BankFlow;
 public class Account : AggregateRoot
 {
     public required Guid CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public required Customer Customer { get; set; }
     public required Agency Agency { get; set; }
     public required AccountNumber Number { get; set; }    
     public decimal Balance { get; private set; }

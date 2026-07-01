@@ -3,9 +3,10 @@ namespace BankFlow;
 public class BankAccount : Entity
 {
     public string Name { get; private set; }
+    public Guid BankId { get; private set; }
     public Bank Bank { get; private set; }
     public Agency Agency { get; private set; }
-    public AccountNumber AccountNumber { get; private set; }
+    public AccountNumber Number { get; private set; }
     public PixKey? PixKey { get; private set; }
 
     public BankAccount(
@@ -18,7 +19,7 @@ public class BankAccount : Entity
         Name = name;
         Bank = bank;
         Agency = agency;
-        AccountNumber = accountNumber;
+        Number = accountNumber;
         PixKey = pixKey;
     }
 }
